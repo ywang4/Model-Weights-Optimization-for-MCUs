@@ -11,9 +11,11 @@ file with highest performance for MCUs.
 keras.models.save_model(model, "model.h5")
 ```
   
-## TODO LISTS
-### 1. Visualization
-
-### 2. Read&Save weight and model files
-
-### 3. Manipulation and Optimization
+## Tasks
+### 1. Input file
+* Read the weights and model structure respectively from a HDF5 file (1/18)
+### 2. Modify weights
+* Modify weights using quantization (2/1)
+* Save the new weights in a HDF5 file which is readable by keras and tensorflow (2/15)
+### 3. Test
+* Test the performance of the new model (3/1)
