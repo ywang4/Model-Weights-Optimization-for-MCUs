@@ -1,7 +1,7 @@
 from keras.models import load_model
 
 
-def visualization(model_path):
+def print_model_structure(model_path):
     '''
 
     :param model_path: The path where the model is saved
@@ -10,7 +10,9 @@ def visualization(model_path):
     model = load_model(model_path)
     model.summary()
 
+def print_model_weights(model_path):
+
 
 if __name__ == '__main__':
     model_path = "test_model_files/cifar10_model.h5"
-    visualization(model_path)
+    print_model_structure(model_path)
