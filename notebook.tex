@@ -281,7 +281,19 @@
 
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k}{import} \PY{n}{load\PYZus{}model}
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{import} \PY{n+nn}{keras}
+        \PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k}{import} \PY{n}{load\PYZus{}model}
+        \PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{datasets} \PY{k}{import} \PY{n}{cifar10}
+        \PY{k+kn}{from} \PY{n+nn}{keras} \PY{k}{import} \PY{n}{backend} \PY{k}{as} \PY{n}{K}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        
+        \PY{c+c1}{\PYZsh{} Load the dataset that could be used to test for model performance}
+        \PY{p}{(}\PY{n}{x\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{p}{)} \PY{o}{=} \PY{n}{cifar10}\PY{o}{.}\PY{n}{load\PYZus{}data}\PY{p}{(}\PY{p}{)}
+        \PY{n}{num\PYZus{}classes} \PY{o}{=} \PY{l+m+mi}{10}
+        \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{keras}\PY{o}{.}\PY{n}{utils}\PY{o}{.}\PY{n}{to\PYZus{}categorical}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{num\PYZus{}classes}\PY{p}{)}
+        
+        
+        \PY{c+c1}{\PYZsh{} Interrupt the kernel after evaluate the model}
 \end{Verbatim}
 
 
@@ -292,6 +304,27 @@ Using TensorFlow backend.
 
     \end{Verbatim}
 
+    The model's accuracy is as below. It is not necessay to run this section
+because this would just serve as a baseline. Have to restart kernel
+after running the evaluation to clear GPU memeory usage.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{c+c1}{\PYZsh{} Load the keras model files that could be used to test the functions in later sections}
+        \PY{n}{model\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}model\PYZus{}files/cifar10\PYZus{}model.h5}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{model} \PY{o}{=} \PY{n}{load\PYZus{}model}\PY{p}{(}\PY{n}{model\PYZus{}path}\PY{p}{)}
+        \PY{n}{model}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{x\PYZus{}test}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{y\PYZus{}test}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+10000/10000 [==============================] - 1s 96us/step
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:} [4.972338047027588, 0.686]
+\end{Verbatim}
+            
     \subsubsection{load model weights from a keras
 model}\label{load-model-weights-from-a-keras-model}
 
@@ -300,7 +333,7 @@ layer's weight matrix and configuration. Then I save the each layer's
 weight matrix in one list so that I could modify them later.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}9}]:} \PY{k}{def} \PY{n+nf}{load\PYZus{}model\PYZus{}weights}\PY{p}{(}\PY{n}{model}\PY{p}{)}\PY{p}{:}
+{\color{incolor}In [{\color{incolor}2}]:} \PY{k}{def} \PY{n+nf}{load\PYZus{}model\PYZus{}weights}\PY{p}{(}\PY{n}{model}\PY{p}{)}\PY{p}{:}
             \PY{c+c1}{\PYZsh{} Create two variables to store the layer information and weight matrixes.}
             \PY{n}{layers\PYZus{}name} \PY{o}{=} \PY{p}{[}\PY{p}{]}
             \PY{n}{weights} \PY{o}{=} \PY{p}{[}\PY{p}{]}
@@ -320,7 +353,7 @@ weight matrix in one list so that I could modify them later.
 model}\label{save-the-modified-model-weights-into-the-keras-model}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{k}{def} \PY{n+nf}{save\PYZus{}model\PYZus{}weights}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{new\PYZus{}weights}\PY{p}{)}\PY{p}{:}
+{\color{incolor}In [{\color{incolor}3}]:} \PY{k}{def} \PY{n+nf}{save\PYZus{}model\PYZus{}weights}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{new\PYZus{}weights}\PY{p}{)}\PY{p}{:}
             \PY{c+c1}{\PYZsh{} Loop through the list containing each layer\PYZsq{}s new weight}
             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{new\PYZus{}weights}\PY{p}{)}\PY{p}{)}\PY{p}{:}
                 \PY{c+c1}{\PYZsh{} set the weight for each layer using set\PYZus{}weight()}
@@ -329,16 +362,50 @@ model}\label{save-the-modified-model-weights-into-the-keras-model}
 \end{Verbatim}
 
 
+    \subsubsection{binarization}\label{binarization}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{c+c1}{\PYZsh{} map the weights to \PYZhy{}1 or 1}
+         \PY{k}{def} \PY{n+nf}{post\PYZus{}train\PYZus{}binarization}\PY{p}{(}\PY{n}{weight\PYZus{}data}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} Loop through each layer}
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{weight\PYZus{}data}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} if the layer has weight to be modified:}
+                 \PY{k}{if} \PY{n}{weight\PYZus{}data}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{:}
+                     \PY{c+c1}{\PYZsh{} loop through all weights in the layer}
+                     \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{weight\PYZus{}data}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                         \PY{c+c1}{\PYZsh{} if the number is greater than 0, map the number to 1, and vice versa.}
+                         \PY{n}{weight\PYZus{}data}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{weight\PYZus{}data}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dtype}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{i1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+             \PY{k}{return} \PY{n}{weight\PYZus{}data}      
+             
+\end{Verbatim}
+
+
+    \subsubsection{quantization}\label{quantization}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{def} \PY{n+nf}{post\PYZus{}train\PYZus{}quantization}\PY{p}{(}\PY{n}{weight\PYZus{}data}\PY{p}{)}\PY{p}{:}
+            \PY{c+c1}{\PYZsh{} map the 8 bits of precision to 4 bits}
+            \PY{c+c1}{\PYZsh{} [7, \PYZhy{}8]}
+\end{Verbatim}
+
+
+    \subsubsection{Test for loading and saving weights from
+files}\label{test-for-loading-and-saving-weights-from-files}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{weights}\PY{p}{,} \PY{n}{model\PYZus{}struct} \PY{o}{=} \PY{n}{load\PYZus{}model\PYZus{}weights}\PY{p}{(}\PY{n}{model}\PY{p}{)}
+\end{Verbatim}
+
+
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}6}]:} \PY{n}{model\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test\PYZus{}model\PYZus{}files/cifar10\PYZus{}model.h5}\PY{l+s+s2}{\PYZdq{}}
         \PY{n}{model} \PY{o}{=} \PY{n}{load\PYZus{}model}\PY{p}{(}\PY{n}{model\PYZus{}path}\PY{p}{)}
-        \PY{c+c1}{\PYZsh{} print\PYZus{}model\PYZus{}structure(model)}
         \PY{n}{weights}\PY{p}{,} \PY{n}{model\PYZus{}struct} \PY{o}{=} \PY{n}{load\PYZus{}model\PYZus{}weights}\PY{p}{(}\PY{n}{model}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{model}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{model}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -436,21 +503,21 @@ Non-trainable params: 0
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{shape}
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{shape}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}19}]:} (3, 3, 3, 32)
+{\color{outcolor}Out[{\color{outcolor}8}]:} (3, 3, 3, 32)
 \end{Verbatim}
             
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{shape}
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{shape}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}20}]:} (32,)
+{\color{outcolor}Out[{\color{outcolor}9}]:} (32,)
 \end{Verbatim}
             
     From the above, using the model.summary() I can see each layer's
@@ -460,6 +527,47 @@ layer weights contains two weight matrix, with shape of (3, 3, 3, 32)
 and (32,), which means there are 896 parameters in the first layer and
 the number agrees to the first row of table from model.summarty()
 
+    \subsubsection{Test for modifing weights and load to
+model}\label{test-for-modifing-weights-and-load-to-model}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{c+c1}{\PYZsh{} Binarize the weights and load the modified weights to model}
+         \PY{n}{new\PYZus{}weights} \PY{o}{=} \PY{n}{post\PYZus{}train\PYZus{}binarization}\PY{p}{(}\PY{n}{weights}\PY{p}{)}
+         \PY{n}{binarized\PYZus{}model} \PY{o}{=} \PY{n}{save\PYZus{}model\PYZus{}weights}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{new\PYZus{}weights}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{model}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{x\PYZus{}test}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{y\PYZus{}test}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+10000/10000 [==============================] - 1s 89us/step
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}33}]:} [14.364446496582032, 0.1088]
+\end{Verbatim}
+            
+    The binarization and save weights functions works. As the result shows,
+the accuracy decreases significantly. Here the data type is 8 bit
+integer, I am still working on how to convert the weights to signed 4
+bit integer.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}39}]:} \PY{c+c1}{\PYZsh{} Showing a piece of weights from the new weight}
+         \PY{n}{new\PYZus{}weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}39}]:} array([-1, -1, -1, -1,  1, -1, -1,  1,  1, -1,  1, -1,  1,  1, -1, -1,  1,
+                -1, -1, -1,  1,  1, -1, -1, -1,  1, -1,  1, -1,  1,  1, -1],
+               dtype=int8)
+\end{Verbatim}
+            
 
     % Add a bibliography block to the postdoc
     
